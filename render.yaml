@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: telegram-ai-bot
+    env: python
+    plan: free
+    startCommand: python bot.py
+    autoDeploy: true
+    buildFilter:
+      paths:
+        - src/
+        - bot.py
+        - requirements.txt
+    envVars:
+      - key: TELEGRAM_TOKEN
+        scope: build,runtime
+        value: "${TELEGRAM_TOKEN}"
+      - key: AI_API_URL
+        scope: build,runtime
+        value: "${AI_API_URL}"
+      - key: PYTHON_VERSION
+        value: "3.11"
