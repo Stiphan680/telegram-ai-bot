@@ -443,59 +443,6 @@ class AdvancedAIAPIClient:
 
 ai_client = AdvancedAIAPIClient(AI_API_URL)
 
-# ============ KEYBOARD BUILDERS ============
-def get_main_menu():
-    markup = telebot.types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-    buttons = [
-        telebot.types.KeyboardButton("🧠 Deep Thinking AI"),
-        telebot.types.KeyboardButton("💬 Smart Chat"),
-        telebot.types.KeyboardButton("🎨 Generate Image"),
-        telebot.types.KeyboardButton("🎥 Generate Video"),
-        telebot.types.KeyboardButton("💻 Generate Code"),
-        telebot.types.KeyboardButton("🌐 Translate"),
-        telebot.types.KeyboardButton("🧠 My Memory"),
-        telebot.types.KeyboardButton("❓ Help")
-    ]
-    markup.add(*buttons)
-    return markup
-
-def get_thinking_styles():
-    markup = telebot.types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-    buttons = [
-        telebot.types.KeyboardButton("🔬 Analytical"),
-        telebot.types.KeyboardButton("🎓 Educational"),
-        telebot.types.KeyboardButton("💡 Creative"),
-        telebot.types.KeyboardButton("⚙️ Technical"),
-        telebot.types.KeyboardButton("📚 Philosophical"),
-        telebot.types.KeyboardButton("⬅️ Back")
-    ]
-    markup.add(*buttons)
-    return markup
-
-def get_image_styles():
-    markup = telebot.types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-    buttons = [
-        telebot.types.KeyboardButton("🖼️ Realistic"),
-        telebot.types.KeyboardButton("🎨 Artistic"),
-        telebot.types.KeyboardButton("🌈 Fantasy"),
-        telebot.types.KeyboardButton("🎭 Cinematic"),
-        telebot.types.KeyboardButton("🖌️ Oil Painting"),
-        telebot.types.KeyboardButton("⬅️ Back")
-    ]
-    markup.add(*buttons)
-    return markup
-
-def get_memory_menu():
-    markup = telebot.types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-    buttons = [
-        telebot.types.KeyboardButton("📜 View History"),
-        telebot.types.KeyboardButton("📊 Memory Stats"),
-        telebot.types.KeyboardButton("🗑️ Clear Memory"),
-        telebot.types.KeyboardButton("⬅️ Back to Menu")
-    ]
-    markup.add(*buttons)
-    return markup
-
 # ============ ERROR HANDLER ============
 def error_handler(func):
     @wraps(func)
@@ -506,8 +453,7 @@ def error_handler(func):
             logger.error(f"❌ Error in {func.__name__}: {str(e)}")
             bot.send_message(
                 message.chat.id,
-                f"❌ कुछ गलत हुआ। कृपया दोबारा कोशिश करें।\n\nError: {str(e)[:50]}...",
-                reply_markup=get_main_menu()
+                f"❌ कुछ गलत हुआ। कृपया दोबारा कोशिश करें।\n\nError: {str(e)[:50]}..."
             )
     return wrapper
 
@@ -529,72 +475,39 @@ def handle_start(message):
 ✨ **मैं हूँ सबसे Advanced AI Bot:**
 
 🧠 **Deep Thinking AI** - Claude-Level Intelligence
-   • गहराई से सोचता हूँ
-   • जटिल समस्याओं का समाधान
-   • विस्तृत विश्लेषण
-
 💬 **Smart Chat** - Context के साथ बातचीत
 💻 **Code Generation** - किसी भी language में
-🎨 **Image Generation** - 6 अलग-अलग styles
+🎨 **Image Generation** - Multiple styles
 🎥 **Video Generation** - Professional quality
 🌐 **Translation** - 50+ languages
 🧠 **Smart Memory** - 10 messages याद रखता हूँ
 
-**क्या करना चाहते हो?**
+👉 बस normal message bhejo, main **intent detect karke** सही feature use करूँगा.
 """
     
-    bot.send_message(message.chat.id, welcome, reply_markup=get_main_menu(), parse_mode='Markdown')
+    bot.send_message(message.chat.id, welcome, parse_mode='Markdown')
 
 @bot.message_handler(commands=['help'])
 @error_handler
 def handle_help(message):
-    help_text = f"""
-📚 **ADVANCED FEATURES GUIDE**
+    help_text = """📚 **HOW TO USE (Buttons हट गए, pure smart mode):**
 
-1️⃣ **🧠 Deep Thinking AI**
-   • सबसे intelligent thinking
-   • "गहराई से सोचो" जैसे keywords दो
-   • 5 अलग thinking styles
+बस normal language mein message bhejo, bot khud decide karega:
 
-2️⃣ **💬 Smart Chat**
-   • Context-aware responses
-   • Memory के साथ बेहतर जवाब
-   • Multi-language support
+- Agar tum likho: "गहराई से समझाओ", "why", "how" → 🧠 Deep Thinking AI
+- Agar tum likho: "image", "photo", "तस्वीर" → 🎨 Image Generation
+- Agar tum likho: "video", "वीडियो" → 🎥 Video Generation
+- Agar tum likho: "code", "python", "program" → 💻 Code Generation
+- Agar tum likho: "translate", "अनुवाद" → 🌐 Translation
+- Baaki sab normal chat → 💬 Smart Chat
 
-3️⃣ **🎨 Image Generation**
-   • 6 professional styles
-   • High quality 1024x1024
-   • Detailed descriptions
-
-4️⃣ **🎥 Video Generation**
-   • Professional quality videos
-   • 10+ seconds duration
-   • Multiple effects
-
-5️⃣ **💻 Code Generation**
-   • 20+ programming languages
-   • Detailed comments
-   • Production-ready code
-
-6️⃣ **🌐 Translation**
-   • 50+ languages
-   • Natural translations
-   • Context preservation
-
-7️⃣ **🧠 Smart Memory**
-   • Last 10 conversations याद रखता हूँ
-   • Better context awareness
-   • Personal preferences
-
-**उदाहरण:**
-• "गहराई से सोचो कि कैसे AI काम करता है"
-• "Sunset की image बनाओ oil painting style में"
-• "Python में machine learning code लिखो"
-
-🚀 **Let's Get Started!**
+Example messages:
+- "गहराई से सोचो AI ka future kya hoga"
+- "Mountain par sunset ki realistic image banao"
+- "Python mein login system ka code likho"
+- "Isko Hindi mein translate karo: I love programming"
 """
-    
-    bot.send_message(message.chat.id, help_text, reply_markup=get_main_menu(), parse_mode='Markdown')
+    bot.send_message(message.chat.id, help_text, parse_mode='Markdown')
 
 @bot.message_handler(commands=['status'])
 @error_handler
@@ -602,418 +515,135 @@ def handle_status(message):
     api_health = ai_client.check_health()
     memory_stats = conversation_memory.get_stats()
     
-    status_text = f"""
-📊 **BOT STATUS & STATS**
+    status_text = f"""📊 **BOT STATUS & STATS**
 
-**System Status:**
-✅ Bot: ONLINE
-{'✅' if api_health else '❌'} API: {'HEALTHY' if api_health else 'OFFLINE'}
-✅ Memory: ACTIVE
-✅ Deep Thinking: ENABLED
-✅ Generation: READY
+Bot: ✅ ONLINE
+API: {'✅ HEALTHY' if api_health else '❌ OFFLINE'}
+Memory: 🧠 ACTIVE
 
-**Memory Statistics:**
-📈 Total Users: {memory_stats['total_users']}
-📝 Total Messages: {memory_stats['total_messages']}
-💾 Max/User: {memory_stats['max_size']}
-
-**Models:**
-🧠 Deep Thinking: {DEEP_THINKING_MODEL}
-💬 Standard: {STANDARD_MODEL}
-
-⏰ Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S IST')}
+Users with memory: {memory_stats['total_users']}
+Total messages stored: {memory_stats['total_messages']}
+Max messages per user: {memory_stats['max_size']}
 """
-    
     bot.send_message(message.chat.id, status_text, parse_mode='Markdown')
 
-# ============ DEEP THINKING AI HANDLER ============
-@bot.message_handler(func=lambda m: "Deep Thinking AI" in m.text)
-@error_handler
-def handle_deep_thinking_mode(message):
-    if not rate_limiter.is_allowed(message.chat.id, 'thinking'):
-        bot.send_message(
-            message.chat.id,
-            "⚠️ Deep Thinking Rate Limit: 5 requests per 2 minutes\n\nकुछ समय बाद कोशिश करें।"
-        )
-        return
-    
-    thinking_intro = """
-🧠 **DEEP THINKING MODE ACTIVATED**
+# ============ FEATURE HANDLERS (NO BUTTON FLOWS) ============
 
-**5 Thinking Styles:**
-• 🔬 **Analytical** - Data-driven analysis
-• 🎓 **Educational** - Learning-focused
-• 💡 **Creative** - Out-of-box thinking
-• ⚙️ **Technical** - Deep technical insights
-• 📚 **Philosophical** - Deep reasoning
-
-अपना thinking style चुनो, फिर सवाल पूछो!
-"""
-    
-    msg = bot.send_message(
-        message.chat.id,
-        thinking_intro,
-        reply_markup=get_thinking_styles(),
-        parse_mode='Markdown'
-    )
-    bot.register_next_step_handler(msg, process_thinking_style)
-
-def process_thinking_style(message):
-    user_id = message.chat.id
-    
-    if "Back" in message.text:
-        bot.send_message(user_id, "Main Menu:", reply_markup=get_main_menu())
-        return
-    
-    style = message.text.replace("🔬 ", "").replace("🎓 ", "").replace("💡 ", "").replace("⚙️ ", "").replace("📚 ", "")
-    
-    msg = bot.send_message(
-        user_id,
-        f"\n🧠 {style} Mode चुना है।\n\nअब अपना गहरा सवाल पूछो:\n\n(जितना विस्तार से पूछोगे, उतना विस्तार से जवाब मिलेगा)",
-        parse_mode='Markdown'
-    )
-    bot.register_next_step_handler(msg, process_deep_thinking, style)
-
-def process_deep_thinking(message, style):
-    user_id = message.chat.id
-    user_question = message.text
-    
+def run_deep_thinking(user_id, user_text):
     if not rate_limiter.is_allowed(user_id, 'thinking'):
-        bot.send_message(user_id, "⚠️ Rate limit. थोड़ा इंतज़ार करो।")
+        bot.send_message(user_id, "⚠️ Deep Thinking limit cross ho gaya, thoda wait karo.")
         return
     
-    conversation_memory.add_message(user_id, "user", f"[{style}] {user_question}")
-    
-    thinking_msg = bot.send_message(
-        user_id,
-        "🧠 गहराई से सोच रहा हूँ... (यह 30-60 सेकंड ले सकता है)\n\n⏳ कृपया प्रतीक्षा करें..."
-    )
-    
+    conversation_memory.add_message(user_id, "user", user_text)
+    thinking_msg = bot.send_message(user_id, "🧠 गहराई से सोच रहा हूँ... (30-60 sec लग सकते हैं)")
     context = conversation_memory.get_context_string(user_id, last_n=3)
-    thinking_prompt = f"""
-{style} Mode - Deep Thinking Request:
-
-{user_question}
-
-Please provide:
-1. Deep analysis with reasoning
-2. Multiple perspectives
-3. Detailed explanations
-4. Examples if applicable
-5. Actionable insights
-"""
     
-    response = ai_client.deep_thinking_chat(thinking_prompt, context)
-    
+    response = ai_client.deep_thinking_chat(user_text, context)
     if "error" not in response:
         ai_reply = response.get("response", "कोई reply नहीं मिला")
-        
-        # Format deep thinking response
-        formatted_reply = f"""🧠 **{style} Analysis:**\n\n{ai_reply}"""
-        
         conversation_memory.add_message(user_id, "bot", ai_reply)
-        
-        if len(formatted_reply) > 4096:
-            for i in range(0, len(formatted_reply), 4096):
-                bot.send_message(user_id, formatted_reply[i:i+4096], parse_mode='Markdown')
+        final_text = f"🧠 **Deep Thinking Result:**\n\n{ai_reply}"
+        if len(final_text) > 4096:
+            for i in range(0, len(final_text), 4096):
+                bot.send_message(user_id, final_text[i:i+4096], parse_mode='Markdown')
             bot.delete_message(user_id, thinking_msg.message_id)
         else:
-            bot.edit_message_text(formatted_reply, user_id, thinking_msg.message_id, parse_mode='Markdown')
+            bot.edit_message_text(final_text, user_id, thinking_msg.message_id, parse_mode='Markdown')
     else:
-        bot.edit_message_text(
-            f"❌ Error: {response['error']}",
-            user_id,
-            thinking_msg.message_id
-        )
-    
-    bot.send_message(user_id, "\n और कोई सवाल?", reply_markup=get_main_menu())
+        bot.edit_message_text(f"❌ Error: {response['error']}", user_id, thinking_msg.message_id)
 
-# ============ IMAGE GENERATION HANDLER ============
-@bot.message_handler(func=lambda m: "Generate Image" in m.text)
-@error_handler
-def handle_image_mode(message):
-    if not rate_limiter.is_allowed(message.chat.id, 'generation'):
-        bot.send_message(
-            message.chat.id,
-            "⚠️ Image Generation Rate Limit: 3 per 5 minutes\n\nथोड़ा इंतज़ार करो।"
-        )
-        return
-    
-    image_intro = """
-🎨 **IMAGE GENERATION MODE**
 
-**6 Professional Styles:**
-• 🖼️ **Realistic** - Photo-realistic images
-• 🎨 **Artistic** - Artistic rendering
-• 🌈 **Fantasy** - Fantasy worlds
-• 🎭 **Cinematic** - Movie-quality
-• 🖌️ **Oil Painting** - Classical style
-• 🌌 **Sci-Fi** - Futuristic
-
-Style चुनो, फिर description दो!
-"""
-    
-    msg = bot.send_message(
-        message.chat.id,
-        image_intro,
-        reply_markup=get_image_styles(),
-        parse_mode='Markdown'
-    )
-    bot.register_next_step_handler(msg, process_image_style)
-
-def process_image_style(message):
-    user_id = message.chat.id
-    
-    if "Back" in message.text:
-        bot.send_message(user_id, "Main Menu:", reply_markup=get_main_menu())
-        return
-    
-    style_map = {
-        "🖼️ Realistic": "realistic",
-        "🎨 Artistic": "artistic",
-        "🌈 Fantasy": "fantasy",
-        "🎭 Cinematic": "cinematic",
-        "🖌️ Oil Painting": "oil_painting",
-        "🌌 Sci-Fi": "scifi"
-    }
-    
-    style = style_map.get(message.text, "realistic")
-    
-    msg = bot.send_message(
-        user_id,
-        f"\n🎨 {message.text} चुना।\n\nअब detailed description दो:\n(जितना विस्तार से बताओगे, उतनी बेहतर image बनेगी)",
-        parse_mode='Markdown'
-    )
-    bot.register_next_step_handler(msg, process_image_request, style)
-
-def process_image_request(message, style):
-    user_id = message.chat.id
-    prompt = message.text
-    
+def run_image_generation(user_id, user_text):
     if not rate_limiter.is_allowed(user_id, 'generation'):
-        bot.send_message(user_id, "⚠️ Rate limit. कुछ समय बाद कोशिश करो।")
+        bot.send_message(user_id, "⚠️ Image generation limit cross ho gaya, thoda wait karo.")
         return
     
-    conversation_memory.add_message(user_id, "user", f"Image: {prompt}")
-    
-    processing = bot.send_message(
-        user_id,
-        f"🎨 {style.replace('_', ' ').title()} style में image बन रही है...\n\n⏳ कृपया प्रतीक्षा करें (1-2 मिनट ले सकता है)..."
-    )
-    
-    response = ai_client.generate_image(prompt, style)
+    conversation_memory.add_message(user_id, "user", f"Image: {user_text}")
+    processing = bot.send_message(user_id, "🎨 Image ban rahi hai... 30-90 sec wait karo...")
+    response = ai_client.generate_image(user_text, style="realistic")
     
     if "error" not in response and "image_url" in response:
         try:
-            bot.send_photo(
-                user_id,
-                response["image_url"],
-                caption=f"✨ **{style.title()}** Style\n\n📝 Prompt: {prompt[:100]}...",
-                parse_mode='Markdown'
-            )
+            bot.send_photo(user_id, response["image_url"], caption=f"🖼️ {user_text[:80]}...", parse_mode='Markdown')
             bot.delete_message(user_id, processing.message_id)
-            conversation_memory.add_message(user_id, "bot", f"Generated: {prompt}")
+            conversation_memory.add_message(user_id, "bot", f"Image generated")
         except Exception as e:
-            bot.edit_message_text(
-                f"❌ Error sending image: {str(e)[:100]}",
-                user_id,
-                processing.message_id
-            )
+            bot.edit_message_text(f"❌ Send error: {str(e)[:80]}", user_id, processing.message_id)
     else:
-        bot.edit_message_text(
-            f"❌ Image Generation Failed:\n{response.get('error', 'Unknown error')}",
-            user_id,
-            processing.message_id
-        )
-    
-    bot.send_message(user_id, "\n और कुछ?", reply_markup=get_main_menu())
+        bot.edit_message_text(f"❌ Image generation failed: {response.get('error', 'Unknown error')}", user_id, processing.message_id)
 
-# ============ VIDEO GENERATION HANDLER ============
-@bot.message_handler(func=lambda m: "Generate Video" in m.text)
-@error_handler
-def handle_video_mode(message):
-    if not rate_limiter.is_allowed(message.chat.id, 'generation'):
-        bot.send_message(
-            message.chat.id,
-            "⚠️ Video Generation Rate Limit: 3 per 5 minutes\n\nथोड़ा इंतज़ार करो।"
-        )
-        return
-    
-    msg = bot.send_message(
-        message.chat.id,
-        "🎥 **VIDEO GENERATION MODE**\n\nDetailed video description दो:\n(Example: 'Sunset के समय ocean की waves')",
-        parse_mode='Markdown'
-    )
-    bot.register_next_step_handler(msg, process_video_request)
 
-def process_video_request(message):
-    user_id = message.chat.id
-    description = message.text
-    
+def run_video_generation(user_id, user_text):
     if not rate_limiter.is_allowed(user_id, 'generation'):
-        bot.send_message(user_id, "⚠️ Rate limit")
+        bot.send_message(user_id, "⚠️ Video generation limit cross ho gaya, thoda wait karo.")
         return
     
-    conversation_memory.add_message(user_id, "user", f"Video: {description}")
-    
-    processing = bot.send_message(
-        user_id,
-        "🎥 Professional quality video बन रही है...\n\n⏳ कृपया प्रतीक्षा करें (2-5 मिनट)..."
-    )
-    
-    response = ai_client.generate_video(description, duration=10)
+    conversation_memory.add_message(user_id, "user", f"Video: {user_text}")
+    processing = bot.send_message(user_id, "🎥 Video ban rahi hai... 2-5 minute wait karo...")
+    response = ai_client.generate_video(user_text, duration=10)
     
     if "error" not in response and "video_url" in response:
         try:
-            bot.send_video(
-                user_id,
-                response["video_url"],
-                caption=f"🎬 Professional Video\n\n📝: {description[:80]}...",
-                parse_mode='Markdown'
-            )
+            bot.send_video(user_id, response["video_url"], caption=f"🎬 {user_text[:80]}...", parse_mode='Markdown')
             bot.delete_message(user_id, processing.message_id)
-            conversation_memory.add_message(user_id, "bot", f"Generated video")
+            conversation_memory.add_message(user_id, "bot", f"Video generated")
         except Exception as e:
-            bot.edit_message_text(
-                f"❌ Error: {str(e)[:100]}",
-                user_id,
-                processing.message_id
-            )
+            bot.edit_message_text(f"❌ Send error: {str(e)[:80]}", user_id, processing.message_id)
     else:
-        bot.edit_message_text(
-            f"❌ Video Generation Failed\n{response.get('error', 'Unknown')}",
-            user_id,
-            processing.message_id
-        )
-    
-    bot.send_message(user_id, "\n और?", reply_markup=get_main_menu())
+        bot.edit_message_text(f"❌ Video generation failed: {response.get('error', 'Unknown error')}", user_id, processing.message_id)
 
-# ============ CODE GENERATION HANDLER ============
-@bot.message_handler(func=lambda m: "Generate Code" in m.text)
-@error_handler
-def handle_code_mode(message):
-    if not rate_limiter.is_allowed(message.chat.id, 'standard'):
-        bot.send_message(message.chat.id, "⚠️ Rate limit. कुछ समय बाद कोशिश करो।")
+
+def run_code_generation(user_id, user_text):
+    if not rate_limiter.is_allowed(user_id, 'standard'):
+        bot.send_message(user_id, "⚠️ Code generation limit cross ho gaya.")
         return
     
-    msg = bot.send_message(
-        message.chat.id,
-        "💻 **ADVANCED CODE GENERATION**\n\nक्या code चाहिए?\n(Example: 'Python में machine learning model')",
-        parse_mode='Markdown'
-    )
-    bot.register_next_step_handler(msg, process_code_request)
-
-def process_code_request(message):
-    user_id = message.chat.id
-    
-    conversation_memory.add_message(user_id, "user", f"Code: {message.text}")
-    
-    bot.send_message(user_id, "💻 Professional code लिख रहा हूँ...")
-    response = ai_client.generate_code(message.text, "python")
+    conversation_memory.add_message(user_id, "user", f"Code: {user_text}")
+    bot.send_message(user_id, "💻 Code likh raha hoon...")
+    response = ai_client.generate_code(user_text, language="python")
     
     if "error" not in response and "code" in response:
         code = response["code"]
-        conversation_memory.add_message(user_id, "bot", f"Code generated")
-        
+        conversation_memory.add_message(user_id, "bot", "Code generated")
         if len(code) > 4096:
             for i in range(0, len(code), 4096):
                 bot.send_message(user_id, f"```python\n{code[i:i+4096]}\n```", parse_mode='Markdown')
         else:
             bot.send_message(user_id, f"```python\n{code}\n```", parse_mode='Markdown')
     else:
-        bot.send_message(user_id, f"❌ Error: {response.get('error')}")
-    
-    bot.send_message(user_id, "\n और?", reply_markup=get_main_menu())
+        bot.send_message(user_id, f"❌ Code generation failed: {response.get('error', 'Unknown')}")
 
-# ============ MEMORY HANDLERS ============
-@bot.message_handler(func=lambda m: "My Memory" in m.text)
-@error_handler
-def handle_memory_menu(message):
-    user_id = message.chat.id
-    history = conversation_memory.get_history(user_id)
-    
-    info = f"""
-🧠 **MEMORY MANAGEMENT**
 
-आपकी memory में {len(history)} messages हैं।
-"""
-    
-    bot.send_message(user_id, info, reply_markup=get_memory_menu(), parse_mode='Markdown')
-
-@bot.message_handler(func=lambda m: "View History" in m.text)
-@error_handler
-def handle_view_history(message):
-    user_id = message.chat.id
-    history = conversation_memory.get_history(user_id, last_n=10)
-    
-    if not history:
-        bot.send_message(user_id, "🧠 अभी कोई conversation याद नहीं है।")
-        return
-    
-    history_text = "📜 **Your Conversation History:**\n\n"
-    for i, entry in enumerate(history, 1):
-        emoji = "👤" if entry["role"] == "user" else "🤖"
-        msg_preview = entry["message"][:60] + "..." if len(entry["message"]) > 60 else entry["message"]
-        history_text += f"{i}. {emoji} {msg_preview}\n"
-    
-    bot.send_message(user_id, history_text, parse_mode='Markdown')
-    bot.send_message(user_id, "\n और क्या?", reply_markup=get_memory_menu())
-
-@bot.message_handler(func=lambda m: "Memory Stats" in m.text)
-@error_handler
-def handle_memory_stats(message):
-    stats = conversation_memory.get_stats()
-    
-    stats_text = f"""
-📊 **MEMORY STATISTICS**
-
-📈 Total Users: {stats['total_users']}
-📝 Total Messages: {stats['total_messages']}
-💾 Max/User: {stats['max_size']}
-
-🔍 Your History: {len(conversation_memory.get_history(message.chat.id))} messages
-"""
-    
-    bot.send_message(message.chat.id, stats_text, parse_mode='Markdown')
-
-@bot.message_handler(func=lambda m: "Clear Memory" in m.text)
-@error_handler
-def handle_clear_memory(message):
-    conversation_memory.clear_history(message.chat.id)
-    bot.send_message(message.chat.id, "🗑️ Memory cleared!\n\nनई conversation शुरू करो।", reply_markup=get_main_menu())
-
-# ============ SMART CHAT HANDLER ============
-@bot.message_handler(func=lambda m: "Smart Chat" in m.text)
-@error_handler
-def handle_smart_chat(message):
-    if not rate_limiter.is_allowed(message.chat.id, 'standard'):
-        bot.send_message(message.chat.id, "⚠️ Rate limit.")
-        return
-    
-    msg = bot.send_message(
-        message.chat.id,
-        "💬 **SMART CHAT MODE**\n\nअपना सवाल या बात बताओ:",
-        parse_mode='Markdown'
-    )
-    bot.register_next_step_handler(msg, process_smart_chat)
-
-def process_smart_chat(message):
-    user_id = message.chat.id
-    
+def run_translation(user_id, user_text):
     if not rate_limiter.is_allowed(user_id, 'standard'):
-        bot.send_message(user_id, "⚠️ Rate limit")
+        bot.send_message(user_id, "⚠️ Translation limit cross ho gaya.")
         return
     
-    conversation_memory.add_message(user_id, "user", message.text)
+    conversation_memory.add_message(user_id, "user", f"Translate: {user_text}")
+    bot.send_message(user_id, "🌐 Translate ho raha hai...")
+    response = ai_client.translate(user_text, target_language="hindi")
     
+    if "error" not in response and "translated_text" in response:
+        translation = response["translated_text"]
+        conversation_memory.add_message(user_id, "bot", translation)
+        bot.send_message(user_id, f"✅ **Translated:**\n\n{translation}", parse_mode='Markdown')
+    else:
+        bot.send_message(user_id, f"❌ Translation failed: {response.get('error', 'Unknown')}")
+
+
+def run_smart_chat(user_id, user_text):
+    if not rate_limiter.is_allowed(user_id, 'standard'):
+        bot.send_message(user_id, "⚠️ Rate limit cross ho gaya.")
+        return
+    
+    conversation_memory.add_message(user_id, "user", user_text)
     thinking = bot.send_message(user_id, "💬 सोच रहा हूँ...")
     context = conversation_memory.get_context_string(user_id, last_n=3)
-    response = ai_client.standard_chat(message.text, context)
+    response = ai_client.standard_chat(user_text, context)
     
     if "error" not in response:
         ai_reply = response.get("response", "कोई reply नहीं")
         conversation_memory.add_message(user_id, "bot", ai_reply)
-        
         if len(ai_reply) > 4096:
             for i in range(0, len(ai_reply), 4096):
                 bot.send_message(user_id, ai_reply[i:i+4096])
@@ -1022,65 +652,37 @@ def process_smart_chat(message):
             bot.edit_message_text(ai_reply, user_id, thinking.message_id)
     else:
         bot.edit_message_text(f"❌ Error: {response['error']}", user_id, thinking.message_id)
-    
-    bot.send_message(user_id, "\n और?", reply_markup=get_main_menu())
 
-# ============ TRANSLATION HANDLER ============
-@bot.message_handler(func=lambda m: "Translate" in m.text)
-@error_handler
-def handle_translate(message):
-    if not rate_limiter.is_allowed(message.chat.id, 'standard'):
-        bot.send_message(message.chat.id, "⚠️ Rate limit")
-        return
-    
-    msg = bot.send_message(
-        message.chat.id,
-        "🌐 **TRANSLATION MODE**\n\nक्या translate करना है?",
-        parse_mode='Markdown'
-    )
-    bot.register_next_step_handler(msg, process_translate)
 
-def process_translate(message):
-    user_id = message.chat.id
-    
-    conversation_memory.add_message(user_id, "user", f"Translate: {message.text}")
-    
-    bot.send_message(user_id, "🌐 Translate हो रहा है...")
-    response = ai_client.translate(message.text, "hindi")
-    
-    if "error" not in response:
-        translation = response.get('translated_text', 'No translation')
-        conversation_memory.add_message(user_id, "bot", translation)
-        bot.send_message(user_id, f"✅ **Translated:**\n\n{translation}")
-    else:
-        bot.send_message(user_id, f"❌ Error: {response.get('error')}")
-    
-    bot.send_message(user_id, "\n और?", reply_markup=get_main_menu())
-
-# ============ DEFAULT HANDLER ============
+# ============ DEFAULT HANDLER (PURE NLP + DETECTION) ============
 @bot.message_handler(func=lambda m: True)
 @error_handler
-def handle_default(message):
+def handle_any_message(message):
     user_id = message.chat.id
+    text = message.text or ""
     
+    # Basic rate limit check
     if not rate_limiter.is_allowed(user_id, 'standard'):
-        bot.send_message(user_id, "⚠️ Rate limit")
+        bot.send_message(user_id, "⚠️ Rate limit cross ho gaya, thoda wait karo.")
         return
     
-    intent = intent_recognizer.recognize_intent(message.text)
+    # Detect intent
+    intent = intent_recognizer.recognize_intent(text)
+    logger.info(f"User {user_id} intent: {intent}")
     
     if intent["type"] == "deep_thinking":
-        handle_deep_thinking_mode(message)
+        run_deep_thinking(user_id, text)
     elif intent["type"] == "image":
-        handle_image_mode(message)
+        run_image_generation(user_id, text)
     elif intent["type"] == "video":
-        handle_video_mode(message)
+        run_video_generation(user_id, text)
     elif intent["type"] == "code":
-        handle_code_mode(message)
+        run_code_generation(user_id, text)
     elif intent["type"] == "translate":
-        handle_translate(message)
+        run_translation(user_id, text)
     else:
-        handle_smart_chat(message)
+        run_smart_chat(user_id, text)
+
 
 # ============ FLASK SERVER ============
 def run_flask():
@@ -1092,34 +694,21 @@ if __name__ == "__main__":
 ╔═══════════════════════════════════════════════════╗
 ║  🚀 ULTIMATE ADVANCED TELEGRAM AI BOT v2.0 🚀    ║
 ║                                                   ║
-║  Features Enabled:                                ║
-║  ✅ Deep Thinking AI (Claude-Level)              ║
-║  ✅ Image Generation (6 Styles)                  ║
-║  ✅ Video Generation                             ║
-║  ✅ Advanced Code Generation                     ║
-║  ✅ Translation (50+ Languages)                  ║
-║  ✅ Smart Conversation Memory                    ║
-║  ✅ Advanced NLP Intent Recognition              ║
-║  ✅ Rate Limiting & Security                     ║
-║                                                   ║
-║  Starting up...                                   ║
+║  Mode: PURE SMART (No Buttons, Full NLP Detect)   ║
 ╚═══════════════════════════════════════════════════╝
     """)
-    
     logger.info(f"🔗 API URL: {AI_API_URL}")
     logger.info(f"🧠 Deep Thinking Model: {DEEP_THINKING_MODEL}")
     logger.info(f"💬 Standard Model: {STANDARD_MODEL}")
     logger.info(f"🌐 Flask Port: {PORT}")
     logger.info(f"📊 API Health: {'✅ HEALTHY' if ai_client.check_health() else '❌ OFFLINE'}")
     
-    # Start Flask
     flask_thread = threading.Thread(target=run_flask, daemon=True)
     flask_thread.start()
     logger.info(f"✅ Flask server started on port {PORT}")
     
     try:
         logger.info("🚀 Bot polling started...")
-        logger.info("\n✨ Bot is LIVE! Ready to serve!\n")
         bot.infinity_polling()
     except Exception as e:
         logger.error(f"❌ Bot error: {e}")
